@@ -28,6 +28,21 @@ var albumPicasso = {
      ]
  };
 
+var albumMercury = {
+     title: 'A Data Learn the Language',
+     artist: 'The Mercury Program',
+     label: 'Tiger Style',
+     year: '2002',
+     albumArtUrl: 'assets/images/album_covers/tmp.jpeg',
+     songs: [
+         { title: 'Tequesta', duration: '7:38' },
+         { title: 'Fragile or Possibly Extinct', duration: '7:19' },
+         { title: 'Slightly Drifting', duration: '6:24'},
+         { title: 'Egypt', duration: '4:52' },
+         { title: 'To/From Iceland', duration: '5:41'}
+     ]
+ };
+
 var createSongRow = function(songNumber, songName, songLength) {
      var template =
         '<tr class="album-view-song-item">'
@@ -58,8 +73,29 @@ var setCurrentAlbum = function(album) {
      for (var i = 0; i < album.songs.length; i++) {
          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
      }
+    
  };
+
+
+var switchAlbum = function () {
+    var selectedArtist = document.getElementsByClassName('album-view-artist')[0].textContent;
+        switch (selectedArtist){
+            case "The Mercury Program":
+                setCurrentAlbum(albumPicasso);
+                break;
+            case "Pablo Picasso":
+                setCurrentAlbum(albumMarconi);
+                break;
+            case "Guglielmo Marconi":
+                setCurrentAlbum(albumMercury);
+                break;
+        }
+};
+
  
  window.onload = function() {
-     setCurrentAlbum(albumPicasso);
+     setCurrentAlbum(albumMercury);
+     document.getElementsByClassName('album-cover-art')[0].addEventListener("click", function(){
+         switchAlbum();
+     });                                                                          
  };
