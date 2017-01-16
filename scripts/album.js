@@ -89,79 +89,40 @@ var trackIndex = function(album, song) {
     
 };
 
-var nextSong = function() {
+var changeSong = function() {
     
-    // Know what the previous song is, Ensure wraparound
-    var lastSong = function(index) {
-        return index == 0 ? currentAlbum.songs.length : index;
-    }; 
-    // Get index of current song
+    var buttonName = this.className;
     var songIndex = trackIndex(currentAlbum, currentSongFromAlbum);
     
-    // Increment the index
-    songIndex++;
-    
-    // Ensure wraparound
-    if (songIndex >= currentAlbum.songs.length) {songIndex = 0;} 
-    
-    // Set new current song && currentSongFromAlbum
-    setSong(songIndex + 1);    
-    
-    // Update Player Bar
-    $('.currently-playing .song-name').text(currentSongFromAlbum.title);
-    $('.currently-playing .artist-name').text(currentAlbum.artist);
-    $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + ' - ' + currentAlbum.artist);
-    $('.main-controls .play-pause').html(playerBarPauseButton);
-    
-    
-    // Update HTML of previous && new song's '.song-item-number'
-    var songBefore = lastSong(songIndex);
-    var $lastSongDisplay = getSongNumberedCell(songBefore);
-    var $songDisplay = getSongNumberedCell(currentlyPlayingSongNumber);
-    
-    $songDisplay.html(pauseButtonTemplate);
-    $lastSongDisplay.html(songBefore);
-};
-
-var updatePlayerBarSong = function() {
-    $('.currently-playing .song-name').text(currentSongFromAlbum.title);
-    $('.currently-playing .artist-name').text(currentAlbum.artist);
-    $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + ' - ' + currentAlbum.artist);
-    $('.main-controls .play-pause').html(playerBarPauseButton);
-};
-
-var previousSong = function () {
-    
-    // Know what the next song is, Ensure wraparound
     var lastSong = function(index) {
-        return index == (currentAlbum.songs.length - 1) ? 1 : index + 2;
-    }; 
+        if (buttonName == 'next'){   
+            return index == 0 ? currentAlbum.songs.length : index;
+        } else if (buttonName == 'previous') {
+            return index == (currentAlbum.songs.length - 1) ? 1 : index + 2;
+        }
+    };
     
-    // Get index of current song
-    var songIndex = trackIndex(currentAlbum, currentSongFromAlbum);
+    if (buttonName == 'next') {    
+        songIndex++;
+        songIndex >= currentAlbum.songs.length ? songIndex = 0 : songIndex;  
+    } else if (buttonName == 'previous') { 
+        songIndex--;
+        songIndex < 0 ? songIndex = currentAlbum.songs.length - 1 : songIndex;
+    }
     
-    // Decrement the index
-    songIndex--;
-    
-    // Ensure wraparound
-    if (songIndex < 0) {songIndex = currentAlbum.songs.length - 1;} 
-    
-    // Set new current song && currentSongFromAlbum
     setSong(songIndex + 1);
     
-    // Update Player Bar
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + ' - ' + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
-      
-    // Update HTML of previous && new song's '.song-item-number'
+    
     var songBefore = lastSong(songIndex);
-    var $NextSongDisplay = getSongNumberedCell(songBefore);
+    var $LastSongDisplay = getSongNumberedCell(songBefore);
     var $songDisplay = getSongNumberedCell(currentlyPlayingSongNumber);
     
     $songDisplay.html(pauseButtonTemplate);
-    $NextSongDisplay.html(songBefore);
+    $LastSongDisplay.html(songBefore);
 };
 
 var updatePlayerBarSong = function() {
@@ -185,8 +146,8 @@ var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next')
 
 $(document).ready (function() {
-     setCurrentAlbum(albumPicasso);
-    $previousButton.click(previousSong);
-    $nextButton.click(nextSong);
+    setCurrentAlbum(albumPicasso);
+    $previousButton.click(changeSong);
+    $nextButton.click(changeSong);
  });
 
